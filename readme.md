@@ -1,11 +1,7 @@
 ## 采用webpack的方式进行模块化编程
-1.新建页面在src下提供一个文件夹，如app
-这个文件夹必须包含两个文件（index.js,index.html;
-新建页面后必须重新启动webpack
+1.新建页面在src下提供一个文件夹，如app;这个文件夹必须包含两个文件（index.js,index.html;新建页面后必须重新启动webpack
 
-2.模版引擎换成[xtemplate](https://github.com/xtemplate/xtemplate);
-使用方式在demo文件夹下已经有了。
-采用ES6 import方式引用模块。（和java差不多）具体参考[阮一峰ES6](http://es6.ruanyifeng.com/)
+2.模版引擎换成[xtemplate](https://github.com/xtemplate/xtemplate);使用方式在demo文件夹下已经有了。
 
 3.使用方式
 解压node_module，放在当前目录下。
