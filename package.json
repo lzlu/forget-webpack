@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "node server.js",
-    "build": "rm -r ./build && webpack --config ./webpack.build.multi"
+    "dev": "gulp server",
+    "build": "webpack --config ./webpack.build.multi && gulp cleanless"
   },
   "author": "lulizhou",
   "license": "ISC",
@@ -22,7 +22,13 @@
     "ejs": "^2.5.1",
     "ejs-full-loader": "^1.1.0",
     "express": "^4.14.0",
+    "extract-text-webpack-plugin": "^1.0.1",
     "file-loader": "^0.9.0",
+    "gulp": "^3.9.1",
+    "gulp-clean-css": "^2.0.12",
+    "gulp-less": "^3.1.0",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
     "html-webpack-plugin": "^2.22.0",
     "less": "^2.7.1",
     "less-loader": "^2.2.3",
@@ -43,7 +49,10 @@
   "dependencies": {
     "cheerio": "^0.20.0",
     "express": "^4.14.0",
+    "jquery": "^3.1.0",
+    "moment": "^2.14.1",
     "normalize.css": "^4.2.0",
+    "qiniu-js": "^1.0.14-beta",
     "react": "^15.2.1",
     "react-dom": "^15.2.1",
     "react-tap-event-plugin": "^1.0.0",

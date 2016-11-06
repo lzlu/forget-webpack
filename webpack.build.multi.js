@@ -4,10 +4,12 @@ var fs = require('fs');
 var autoprefixer = require('autoprefixer');
 var precss = require('precss');
 var HtmlwebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin')
 
 // path
 var ROOT = path.join(__dirname, 'src');
-var BUILD = path.join(__dirname, 'build');
+var ASSETS = path.join(__dirname, 'assets');
+var HTML = path.join(__dirname, 'html');
 var CONF = require('./get_path.js');
 
 function linkPlugin(conf) {
@@ -30,8 +32,8 @@ function linkPlugin(conf) {
     conf.forEach(function(e) {
         obj['template'] = '!!ejs-full!src/' + e + '/index.html';
         // 按文件夹分类
-        // obj['filename'] = path.join(BUILD, e + '/index.html');
-        obj['filename'] = path.join(BUILD, e + '.html');
+        // obj['filename'] = path.join(ASSETS, e + '/index.html');
+        obj['filename'] = path.join(HTML, e + '.html');
         obj['chunks'] = [e];
         output.push(new HtmlwebpackPlugin(obj));
     });
@@ -40,7 +42,9 @@ function linkPlugin(conf) {
             compress: {
                 warnings: false
             }
-        })
+        }),
+        new ExtractTextPlugin('[name].css')
+
     ].concat(output);
 }
 // console.log(linkPlugin(CONF));
@@ -55,16 +59,29 @@ function linkPATH(conf) {
 module.exports = {
     entry: linkPATH(CONF),
     output: {
-        path: path.join(BUILD, 'static/js'), //最终产出路径
+        path: path.join(ASSETS, 'static'), //最终产出路径
         filename: '[name].js',
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        root: [
+            path.resolve('./')
+        ],
+        extensions: ['', '.js', '.jsx'],
+        modulesDirectories: [
+            'node_modules', 'libs'
+        ]
     },
     module: {
         loaders: [
-            { test: /.css$/, loader: "style!css!css-loader!postcss-loader" },
-            { test: /.less/, loader: 'style-loader!css-loader!less-loader' }, {
+            {
+                test: /\.css/,
+                loader: ExtractTextPlugin.extract(["css"])
+            },
+            {
+                test: /\.less$/,
+                loader:  ExtractTextPlugin.extract(['css?sourceMap','less?sourceMap'])
+            },
+            {
                 test: /.js$/,
                 exclude: /node_modules/,
                 loader: "babel-loader",

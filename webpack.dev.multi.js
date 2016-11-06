@@ -4,10 +4,11 @@ var fs = require('fs');
 var autoprefixer = require('autoprefixer');
 var precss = require('precss');
 var HtmlwebpackPlugin = require('html-webpack-plugin');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // path
 var ROOT = path.join(__dirname, 'src');
-var BUILD = path.join(__dirname, 'build');
+var ASSETS = path.join(__dirname, 'assets');
 var CONF = require('./get_path.js');
 
 function linkPlugin(conf) {
@@ -21,13 +22,14 @@ function linkPlugin(conf) {
     var exists = false;
     conf.forEach(function(e) {
         obj['template'] = '!!ejs-full!src/' + e + '/index.html';
-        obj['filename'] = './'+e+'.html';
+        obj['filename'] = './dev/'+e+'.html';
         obj['chunks'] = [e];
         output.push(new HtmlwebpackPlugin(obj));
     });
     return [
          new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
+        new ExtractTextPlugin('static/css/[name].css')
     ].concat(output);
 }
 // console.log(linkPlugin(CONF));
@@ -44,18 +46,30 @@ function linkPATH(conf) {
 module.exports = {
     entry: linkPATH(CONF),
     output: {
-        path: __dirname + '/../../', //输出目录的配置，模板、样式、脚本、图片等资源的路径配置都相对于它
+        path: __dirname, //输出目录的配置，模板、样式、脚本、图片等资源的路径配置都相对于它
         publicPath: '/', //模板、样式、脚本、图片等资源对应的server上的路径
         filename: 'static/[name].js',
         chunkFilename: 'static/[id].js'
     },
     resolve: {
-        extensions: ['', '.js', '.jsx']
+        root: [
+            path.resolve('./')
+        ],
+        extensions: ['', '.js', '.jsx'],
+        modulesDirectories: [
+            'node_modules', 'libs'
+        ]
     },
     module: {
         loaders: [
-            { test: /.css$/, loader: "style!css!css-loader!postcss-loader" },
-            { test: /.less/, loader: 'style-loader!css-loader!less-loader' }, {
+            {
+                test: /\.css/,
+                loader: ExtractTextPlugin.extract(["css"])
+            },
+            {
+                test: /\.less$/,
+                loader:  ExtractTextPlugin.extract(['css?sourceMap','less?sourceMap'])
+            }, {
                 test: /.js$/,
                 exclude: /node_modules/,
                 loader: "babel-loader",
