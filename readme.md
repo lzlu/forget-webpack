@@ -1,5 +1,5 @@
 ## 采用webpack的方式进行模块化编程
-<<<<<<< HEAD
+
 1.新建页面在src下提供一个文件夹，如app
 这个文件夹必须包含两个文件（index.js,index.html;
 新建页面后必须重新启动webpack
